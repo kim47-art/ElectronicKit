@@ -15,19 +15,11 @@ motor_3=18
 motor_4=22
 
 #550~2350
-pin=motor_2
+pin=motor_D
 pi = pigpio.pi()
 #ここで-90
-pi.set_servo_pulsewidth(pin,2000)
-time.sleep(3)
+pi.set_servo_pulsewidth(pin,2300)
+time.sleep(1)
 #ここで0
-pi.set_servo_pulsewidth(pin, 1300)
-time.sleep(3)
-#ここで-90
-pi.set_servo_pulsewidth(pin, 2000)
-time.sleep(3)
-# #ここで90
-# pi.set_servo_pulsewidth(pin, 2350)
-# time.sleep(3)
-# #ここで0
-# pi.set_servo_pulsewidth(pin, 1450)
+#pi.set_servo_pulsewidth(pin, 1000)
+#time.sleep(3)
