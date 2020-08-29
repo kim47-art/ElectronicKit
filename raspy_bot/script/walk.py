@@ -75,9 +75,6 @@ for i in range(5):
     time.sleep(0.1)
     front_left_leg.sync_rotate(90)
     time.sleep(0.1)
-    #front_left_knee.sync_rotate(90)
-    #time.sleep(1)
-
 
     #move
     front_right_leg.sync_rotate(0)

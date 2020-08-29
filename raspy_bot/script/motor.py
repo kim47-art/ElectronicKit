@@ -9,13 +9,13 @@ import time
 #gpio_pin
 MOTOR_PARAM = [
      {"gpio_pin_no":4, "pwm_max":1800, "pwm_min":1400,"cw":True},#1
-     {"gpio_pin_no":14, "pwm_max":1750, "pwm_min":1000,"cw":True},#B
-     {"gpio_pin_no":15, "pwm_max":2000, "pwm_min":1300,"cw":False},#2
-     {"gpio_pin_no":17, "pwm_max":1000, "pwm_min":600,"cw":False},#A
-     {"gpio_pin_no":18, "pwm_max":1600, "pwm_min":750,"cw":True},#3
-     {"gpio_pin_no":22, "pwm_max":1000, "pwm_min":550,"cw":False},#4
-     {"gpio_pin_no":23, "pwm_max":2350, "pwm_min":1900,"cw":True},#D
-     {"gpio_pin_no":27, "pwm_max":2250, "pwm_min":1300,"cw":False},#C
+     {"gpio_pin_no":14, "pwm_max":1750, "pwm_min":900,"cw":True},#B
+     {"gpio_pin_no":15, "pwm_max":2100, "pwm_min":1300,"cw":False},#2
+     {"gpio_pin_no":17, "pwm_max":1000, "pwm_min":550,"cw":False},#A
+     {"gpio_pin_no":18, "pwm_max":1600, "pwm_min":700,"cw":True},#3
+     {"gpio_pin_no":22, "pwm_max":1100, "pwm_min":650,"cw":False},#4
+     {"gpio_pin_no":23, "pwm_max":2450, "pwm_min":1950,"cw":True},#D
+     {"gpio_pin_no":27, "pwm_max":2250, "pwm_min":1400,"cw":False},#C
 ]
 
 
@@ -48,11 +48,11 @@ class Motor:
           else:
                pwm_val=self.pwm_max-diff
 
-          print(pwm_val)
+          #print(pwm_val)
           self.pi.set_servo_pulsewidth(self.pin,pwm_val)
 
-     def async_rotate(self,degree,elaps_time_msec):#
-          pi.set_servo_pulsewidth(motor_B,1000)
+     #def async_rotate(self,degree,elaps_time_msec):#
+     #     pi.set_servo_pulsewidth(motor_B,1000)
           
 
 
