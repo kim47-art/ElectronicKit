@@ -29,12 +29,12 @@ def set_allmotor(param,sleep_sec):
     rear_right_knee.sync_rotate(param[7])
     time.sleep(sleep_sec)
 
-set_allmotor([90,90, 0,90,90,90, 0,90],0.5)
+set_allmotor([90,90,90,90,55,90,55,90],0.5)
 
 for i in range(5):
+    set_allmotor([90,90,90,70,55,70,55,90],0.3)
+    set_allmotor([90,90,55,70,90,70,55,90],0.3)
+    set_allmotor([90,90,55,90,90,90,55,90],0.3)
+    set_allmotor([55,70,90,90,55,90,90,70],0.3)
+    set_allmotor([55,90,90,90,55,90,90,90],0.3)
 
-    set_allmotor([90,90, 0,70,90,70, 0,90],0.3)
-    set_allmotor([90,90,90,70, 0,70, 0,90],0.3)
-    set_allmotor([90,90,90,90, 0,90, 0,90],0.3)
-    set_allmotor([ 0,70, 0,90,90,90,90,70],0.3)
-    set_allmotor([ 0,90, 0,90,90,90,90,90],0.3)
