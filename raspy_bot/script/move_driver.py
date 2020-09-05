@@ -18,7 +18,7 @@ class Moter_IF():
         self.BRI=motor.Motor(motor.Motor.motor_4)
         self.BRO=motor.Motor(motor.Motor.motor_3)
     
-    def set_allmotor(self,param,sleep_sec):
+    def set_allmotor(self,param):
         self.FLI.sync_rotate(param[0])
         self.FLO.sync_rotate(param[1])
         self.BLI.sync_rotate(param[2])
@@ -27,7 +27,55 @@ class Moter_IF():
         self.FRO.sync_rotate(param[5])
         self.BRI.sync_rotate(param[6])
         self.BRO.sync_rotate(param[7])
-        time.sleep(sleep_sec)
+        time.sleep(param[8])
+
+class MoveSequenceItr(object):
+    def __init__(self,sequence):
+        self._sequence = sequence
+        self._i = 0
+    def __iter__(self):
+        # __next__()はselfが実装してるのでそのままselfを返す
+        return self
+    def __next__(self):  # Python2だと next(self) で定義
+        if self._i == len(self._sequence):
+            #raise StopIteration()
+            self._i=0
+        value = self._sequence[self._i]
+        self._i += 1
+        return value
+
+
+class MotorThread(threading.Thread)
+    def __init__(self,move_sequence):
+        super(MotorThread,self).__init__()
+        self.moter_if= Moter_IF()
+        self.started = threading.Event()
+        self.alive = True
+        self.move_sequence=move_sequence
+        self.start()
+
+    def __del__(self):
+        self.kill()
+
+    def begin(self):
+        #print("back begin")
+        self.started.set()
+
+    def end(self):
+        self.started.clear()
+        #print("\nback end")
+
+    def kill(self):
+        self.started.set()
+        self.alive = False
+        self.join()
+
+    def run(self):
+        self.started.wait()
+
+        while self.alive:        
+            self.moter_if.set_allmotor(self.move_sequence.__next__())
+            self.started.wait()
 
 class BackThread(threading.Thread):
     def __init__(self):
@@ -105,7 +153,15 @@ class ForwardThread(threading.Thread):
 class Move_driver():
     def __init__(self):
         self.cmd_vel=Twist()
-        self.forward=ForwardThread()
+
+        self.forward_sequence=[ [ 0,70,90,90, 0,90,90,70,0.3],
+                                [90,70,90,90, 0,90, 0,70,0.3],
+                                [90,90,90,90, 0,90, 0,90,0.3],
+                                [ 0,90, 0,70,90,70,90,90,0.3],
+                                [ 0,90, 0,90,90,90,90,90,0.3]]
+
+
+        self.forward=MotorThread(self.forward_sequence)
         self.back=BackThread()
         rospy.Subscriber("/turtle1/cmd_vel", Twist, self.callback)
 
