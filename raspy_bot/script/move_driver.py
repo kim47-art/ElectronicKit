@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+<<<<<<< Updated upstream
 # coding: utf-8
+=======
+# -*- coding: utf-8 -*-
+>>>>>>> Stashed changes
 import rospy
 from geometry_msgs.msg import Twist
 import pigpio
