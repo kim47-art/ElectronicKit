@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 import rospy
 from geometry_msgs.msg import Twist
 import pigpio
@@ -45,13 +46,13 @@ class MoveSequenceItr(object):
         return value
 
 
-class MotorThread(threading.Thread)
+class MotorThread(threading.Thread):
     def __init__(self,move_sequence):
         super(MotorThread,self).__init__()
         self.moter_if= Moter_IF()
         self.started = threading.Event()
         self.alive = True
-        self.move_sequence=move_sequence
+        self.move_sequence=MoveSequenceItr(move_sequence)
         self.start()
 
     def __del__(self):
@@ -94,7 +95,7 @@ class BackThread(threading.Thread):
 
     def end(self):
         self.started.clear()
-        print("\nback end")
+        print("back end")
 
     def kill(self):
         self.started.set()
@@ -112,44 +113,6 @@ class BackThread(threading.Thread):
             self.started.wait()
 
 
-class ForwardThread(threading.Thread):
-    def __init__(self):
-        super(ForwardThread,self).__init__()
-        self.moter_if= Moter_IF()
-        self.started = threading.Event()
-        self.alive = True
-        self.start()
-
-    def __del__(self):
-        self.kill()
-
-    def begin(self):
-        print("forward begin")
-        self.started.set()
-
-    def end(self):
-        self.started.clear()
-        print("\nforward end")
-
-    def kill(self):
-        self.started.set()
-        self.alive = False
-        self.join()
-
-    def run(self):
-        self.started.wait()
-        while self.alive:
-            self.moter_if.set_allmotor([ 0,70,90,90, 0,90,90,70],0.3)
-            self.started.wait()
-            self.moter_if.set_allmotor([90,70,90,90, 0,90, 0,70],0.3)
-            self.started.wait()
-            self.moter_if.set_allmotor([90,90,90,90, 0,90, 0,90],0.3)
-            self.started.wait()
-            self.moter_if.set_allmotor([ 0,90, 0,70,90,70,90,90],0.3)
-            self.started.wait()
-            self.moter_if.set_allmotor([ 0,90, 0,90,90,90,90,90],0.3)
-            self.started.wait()
-
 class Move_driver():
     def __init__(self):
         self.cmd_vel=Twist()
@@ -160,9 +123,15 @@ class Move_driver():
                                 [ 0,90, 0,70,90,70,90,90,0.3],
                                 [ 0,90, 0,90,90,90,90,90,0.3]]
 
+        self.back_sequence=[[90,90, 0,70,90,70, 0,90,0.3],
+                            [90,90,90,70, 0,70, 0,90,0.3],
+                            [90,90,90,90, 0,90, 0,90,0.3],
+                            [ 0,70, 0,90,90,90,90,70,0.3],
+                            [ 0,90, 0,90,90,90,90,90,0.3]]
+
 
         self.forward=MotorThread(self.forward_sequence)
-        self.back=BackThread()
+        self.back=MotorThread(self.back_sequence)
         rospy.Subscriber("/turtle1/cmd_vel", Twist, self.callback)
 
     def callback(self,data):
@@ -179,10 +148,10 @@ class Move_driver():
                 self.forward.end()
             else:
                 self.forward.begin()
-            if(self.cmd_vel.linear.x != -2.0):
-                self.back.end()
-            else:
-                self.back.begin()
+            #if(self.cmd_vel.linear.x != -2.0):
+            #    self.back.end()
+            #else:
+            #    self.back.begin()
             
         self.forward.end()
         self.forward.kill()
