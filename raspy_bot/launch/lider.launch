@@ -1,0 +1,17 @@
+<launch>
+  <group ns="Lider">
+    <node pkg="raspy_bot" name="light_sensor" type="light_sensor.py"/>
+    <node pkg="raspy_bot" name="distance_sensor" type="distance_sensor.py"/>
+    <node pkg="raspy_bot" name="rotate_controller" type="rotate_controller.py"/>
+  </group>
+  <!--<group ns="image_tutorial2">
+    <node pkg="image_tutorial" name="input_node" type="subscriber"/>
+    <node pkg="image_tutorial" name="output_node" type="publisher"/>
+  </group>
+  <node pkg="image_tutorial" name="output_node" type="subscriber">
+    <remap from="image_data" to="data_stack"/>
+  </node>
+  <node pkg="image_tutorial" name="input_node" type="publisher">
+    <remap from="image_data" to="data_stack"/>
+  </node>-->
+</launch>
